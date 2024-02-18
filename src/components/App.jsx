@@ -1,16 +1,28 @@
-export const App = () => {
+import ContactForm from './ContactForm';
+import ContactList from './ContactList';
+import Filter from './Filter';
+
+import { BookUserIcon } from 'lucide-react';
+
+/**
+ * The main component of the application.
+ * @returns {JSX.Element} The JSX element representing the main application.
+ */
+function App() {
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
+    <div className="container mx-auto md:max-w-xl flex flex-col gap-4 p-4 md:p-8">
+      <div className="flex flex-row gap-4 justify-center items-center md:pb-8">
+        <BookUserIcon className="w-12 h-12 text-blue-600" />
+        <h1 className="text-3xl md:text-6xl font-medium">
+          Phone<span className="text-blue-600">Book</span>
+        </h1>
+      </div>
+
+      <ContactForm />
+      <Filter />
+      <ContactList />
     </div>
   );
-};
+}
+
+export default App;
