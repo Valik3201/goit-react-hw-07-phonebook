@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../redux/reducers/contactsSlice';
+import { deleteContact, fetchContacts } from '../redux/operations/operations';
 import {
   selectContacts,
   selectFilter,
@@ -12,6 +13,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Spinner,
 } from '@nextui-org/react';
 import { Button } from '@nextui-org/react';
 import { Trash2 } from 'lucide-react';
@@ -21,16 +23,17 @@ import { Trash2 } from 'lucide-react';
  * @returns {JSX.Element} The JSX element representing the contact list.
  */
 const ContactList = () => {
-  const contacts = useSelector(selectContacts);
   const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
 
-  /**
-   * Filters contacts based on the filter input.
-   * @type {Array}
-   */
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
+  const { items, isLoading, error } = useSelector(selectContacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const filteredContacts = items.filter(i =>
+    i.name.toLowerCase().includes(filter?.toLowerCase())
   );
 
   /**
@@ -38,7 +41,7 @@ const ContactList = () => {
    * @type {Array}
    */
   const sortedContacts = filteredContacts
-    .slice()
+    ?.slice()
     .sort((a, b) => a.name.localeCompare(b.name));
 
   /**
@@ -46,9 +49,7 @@ const ContactList = () => {
    * @param {string} id - The id of the contact to be deleted.
    * @returns {void}
    */
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
-  };
+  const handleDelete = id => dispatch(deleteContact(id));
 
   return (
     <Table
@@ -62,6 +63,30 @@ const ContactList = () => {
         <TableColumn className="w-1/5 text-center">ACTIONS</TableColumn>
       </TableHeader>
       <TableBody emptyContent={'No contacts to display.'}>
+        {isLoading && (
+          <TableRow>
+            <TableCell aria-colspan={3} colSpan={3} className="text-center">
+              <Spinner />
+            </TableCell>
+            <TableCell className="hidden"></TableCell>
+            <TableCell className="hidden"></TableCell>
+          </TableRow>
+        )}
+
+        {error && (
+          <TableRow>
+            <TableCell
+              aria-colspan={3}
+              colSpan={3}
+              className="text-center text-danger"
+            >
+              {error}
+            </TableCell>
+            <TableCell className="hidden"></TableCell>
+            <TableCell className="hidden"></TableCell>
+          </TableRow>
+        )}
+
         {sortedContacts.map(contact => (
           <TableRow key={contact.id}>
             <TableCell>{contact.name}</TableCell>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../redux/reducers/contactsSlice';
-import { nanoid } from 'nanoid';
+import { addContact } from '../redux/operations/operations';
 import { selectContacts } from '../redux/selectors/contactsSelectors';
 import ModalAlert from './ModalAlert';
 
@@ -16,6 +15,7 @@ import { Plus } from 'lucide-react';
  */
 const ContactForm = () => {
   const dispatch = useDispatch();
+
   const contacts = useSelector(selectContacts);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -31,12 +31,11 @@ const ContactForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const existingContact = contacts.find(
+    const existingContact = contacts.items.find(
       contact => contact.name === name || contact.phone === phone
     );
 
     if (!existingContact) {
-      dispatch(addContact({ id: nanoid(), name, phone }));
       setName('');
       setPhone('');
     } else {
@@ -52,6 +51,8 @@ const ContactForm = () => {
         setIsModalOpen(true);
       }
     }
+
+    dispatch(addContact({ name, phone }));
   };
 
   return (
