@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import App from './components/App';
 import { NextUIProvider } from '@nextui-org/react';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import './index.css';
 
 /**
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       {/* Redux Provider for store */}
       <Provider store={store}>
         {/* Main application component */}
-        <App />
+        <NextThemesProvider attribute="class" defaultTheme="dark">
+          <App />
+        </NextThemesProvider>
       </Provider>
     </NextUIProvider>
   </React.StrictMode>
