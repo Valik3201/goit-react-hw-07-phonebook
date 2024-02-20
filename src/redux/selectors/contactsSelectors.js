@@ -20,9 +20,11 @@ export const selectVisibleContacts = createSelector(
   // Define selector function to calculate derived data
   (contacts, filter) => {
     // Filter contacts based on the filter text
-    return contacts.filter(contact =>
-      // Convert both contact name and filter text to lowercase for case-insensitive comparison
-      contact.name.toLowerCase().includes(filter.toLowerCase())
+    return contacts.filter(
+      contact =>
+        // Convert both contact name and filter text to lowercase for case-insensitive comparison
+        contact.name.toLowerCase().includes(filter.toLowerCase()) || // Filter by name
+        contact.phone.toLowerCase().includes(filter.toLowerCase()) // Filter by phone
     );
   }
 );
