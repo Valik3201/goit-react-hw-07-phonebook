@@ -40,7 +40,7 @@ To run the application locally, follow these steps:
 
 Once the application is running, you can perform the following actions:
 
-- **Add a contact**: Click the "Add Contact" button and enter the name and phone number of the contact in the input fields. Then click the "Add" button to save the contact.
+- **Add a contact**: Enter the name and phone number of the contact in the input fields. Then click the "Add" button to save the contact.
 - **Delete a contact**: Click the "Delete" button next to the contact you want to remove from the phonebook.
 - **Filter contacts**: Enter the name or phone of the contact you want to filter in the search input field. The contact list will be filtered in real-time as you type.
 
