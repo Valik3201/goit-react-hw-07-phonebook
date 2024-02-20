@@ -1,39 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/**
- * Initial state for the filter slice.
- * @constant {string}
- */
+// Initial state for the filter slice
 const initialState = '';
 
-/**
- * Redux slice for managing the filter.
- * @constant {object}
- */
+// Redux slice for managing the filter
 const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    /**
-     * Reducer function for setting the filter value.
-     * @function
-     * @param {string} _state - Current state of the filter.
-     * @param {object} action - The action containing the new filter value.
-     * @returns {string} The new filter value.
-     */
+    // Reducer function to set the filter value
     setFilter: (_state, action) => {
+      // Return the payload as the new filter value
       return action.payload;
     },
   },
 });
 
-/**
- * Action creator for setting the filter.
- */
+// Action creator for setting the filter
 export const { setFilter } = filterSlice.actions;
 
-/**
- * Reducer for the filter slice.
- * @constant {function}
- */
+// Reducer for the filter slice
 export default filterSlice.reducer;

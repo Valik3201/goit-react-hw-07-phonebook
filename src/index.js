@@ -13,15 +13,16 @@ import './index.css';
  */
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* Provider for NextUI theme */}
-    <NextUIProvider>
-      {/* Redux Provider for store */}
-      <Provider store={store}>
-        {/* Main application component */}
+    {/* Redux Provider for store */}
+    <Provider store={store}>
+      {/* Provider for NextUI theme */}
+      <NextUIProvider>
+        {/* Provider for NextUI dark mode */}
         <NextThemesProvider attribute="class" defaultTheme="dark">
+          {/* Main application component */}
           <App />
         </NextThemesProvider>
-      </Provider>
-    </NextUIProvider>
+      </NextUIProvider>
+    </Provider>
   </React.StrictMode>
 );
