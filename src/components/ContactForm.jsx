@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../redux/operations/operations';
 import { selectContacts } from '../redux/selectors/contactsSelectors';
@@ -35,7 +35,7 @@ const ContactForm = () => {
       contact => contact.name === name || contact.phone === phone
     );
 
-    if (!existingContact) {
+    if (!existingContact && !isInvalid) {
       setName('');
       setPhone('');
 
@@ -55,6 +55,14 @@ const ContactForm = () => {
     }
   };
 
+  const validatePhone = phone => phone.match(/^[0-9+\-() ]*$/);
+
+  const isInvalid = useMemo(() => {
+    if (phone === '') return false;
+
+    return validatePhone(phone) ? false : true;
+  }, [phone]);
+
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 pb-8">
@@ -64,15 +72,20 @@ const ContactForm = () => {
             label="Name"
             value={name}
             onChange={e => setName(e.target.value)}
+            variant="bordered"
             isRequired
             size="sm"
           />
           <Input
-            type="text"
+            type="tel"
             label="Phone"
             value={phone}
             onChange={e => setPhone(e.target.value)}
+            variant="bordered"
             isRequired
+            isInvalid={isInvalid}
+            errorMessage={isInvalid && 'Please enter a valid phone number'}
+            color={isInvalid && 'danger'}
             size="sm"
           />
         </div>
