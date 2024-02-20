@@ -31,13 +31,15 @@ const ContactForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const existingContact = contacts.items.find(
+    const existingContact = contacts.find(
       contact => contact.name === name || contact.phone === phone
     );
 
     if (!existingContact) {
       setName('');
       setPhone('');
+
+      dispatch(addContact({ name, phone }));
     } else {
       if (existingContact.name === name && existingContact.phone === phone) {
         setExistingName(name);
@@ -51,8 +53,6 @@ const ContactForm = () => {
         setIsModalOpen(true);
       }
     }
-
-    dispatch(addContact({ name, phone }));
   };
 
   return (
