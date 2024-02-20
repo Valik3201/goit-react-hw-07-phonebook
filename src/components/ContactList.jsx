@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteContact, fetchContacts } from '../redux/operations/operations';
 import {
-  selectContacts,
-  selectFilter,
+  selectVisibleContacts,
+  selectIsLoading,
+  selectError,
 } from '../redux/selectors/contactsSelectors';
 
 import {
@@ -23,25 +24,22 @@ import { Trash2 } from 'lucide-react';
  * @returns {JSX.Element} The JSX element representing the contact list.
  */
 const ContactList = () => {
-  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
 
-  const { items, isLoading, error } = useSelector(selectContacts);
+  const items = useSelector(selectVisibleContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const filteredContacts = items.filter(i =>
-    i.name.toLowerCase().includes(filter?.toLowerCase())
-  );
-
   /**
    * Sorts contacts alphabetically by name.
    * @type {Array}
    */
-  const sortedContacts = filteredContacts
-    ?.slice()
+  const sortedContacts = items
+    .slice()
     .sort((a, b) => a.name.localeCompare(b.name));
 
   /**
@@ -63,7 +61,7 @@ const ContactList = () => {
         <TableColumn className="w-1/5 text-center">ACTIONS</TableColumn>
       </TableHeader>
       <TableBody emptyContent={'No contacts to display.'}>
-        {isLoading && (
+        {isLoading && !error && (
           <TableRow>
             <TableCell aria-colspan={3} colSpan={3} className="text-center">
               <Spinner />
@@ -87,34 +85,35 @@ const ContactList = () => {
           </TableRow>
         )}
 
-        {sortedContacts.map(contact => (
-          <TableRow key={contact.id}>
-            <TableCell>{contact.name}</TableCell>
-            <TableCell>{contact.phone}</TableCell>
-            <TableCell className="text-center">
-              <Button
-                color="danger"
-                variant="light"
-                size="sm"
-                startContent={<Trash2 className="w-4 h-4" />}
-                onClick={() => handleDelete(contact.id)}
-                className="hidden md:flex"
-              >
-                Delete
-              </Button>
+        {!isLoading &&
+          sortedContacts.map(contact => (
+            <TableRow key={contact.id}>
+              <TableCell>{contact.name}</TableCell>
+              <TableCell>{contact.phone}</TableCell>
+              <TableCell className="text-center">
+                <Button
+                  color="danger"
+                  variant="light"
+                  size="sm"
+                  startContent={<Trash2 className="w-4 h-4" />}
+                  onClick={() => handleDelete(contact.id)}
+                  className="hidden md:flex"
+                >
+                  Delete
+                </Button>
 
-              <Button
-                color="danger"
-                variant="light"
-                isIconOnly
-                onClick={() => handleDelete(contact.id)}
-                className="md:hidden"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+                <Button
+                  color="danger"
+                  variant="light"
+                  isIconOnly
+                  onClick={() => handleDelete(contact.id)}
+                  className="md:hidden"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );
